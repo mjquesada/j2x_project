@@ -1,29 +1,63 @@
 import streamlit as st
+from map import main as map_app
+from roster import main as roster_app
 
 # Set page title
 st.set_page_config(page_title='J2X', page_icon=':rocket:')
+
+# Custom CSS to reduce padding above the 'Main Tab' heading
+custom_css = """
+<style>
+h1 {
+    margin-top: 0;
+}
+/* Add this block for custom styling of Row 1 components */
+[data-testid="stHorizontalBlock"] > div {
+    margin: 0;
+    padding: 0;
+}
+</style>
+"""
+
+# Apply custom CSS
+st.markdown(custom_css, unsafe_allow_html=True)
+
 st.markdown('<div style="display: flex; flex-direction: row;">', unsafe_allow_html=True)
 
 # Sidebar with buttons
-selected_tab = st.sidebar.radio("Navigation", ['Main', 'Map', 'COP'])
+selected_tab = st.sidebar.radio("Navigation", ['Main', 'Map', 'Roster'])
 
-# Main content based on the selected tab
-if selected_tab == 'Main':
-    st.title('Main Tab')
-    # Add your main tab content here
-elif selected_tab == 'Map':
-    st.title('Map Tab')
-    # Add your map tab content here
-elif selected_tab == 'COP':
-    st.title('COP Tab')
-    # Add your COP tab content here
+# Define the sub-apps
+sub_apps = {
+    "Main": None,  # Add your main tab content here
+    "Map": map_app,  # Use the app from map.py for the "Map" tab
+    "Roster": roster_app,  # Use the app from roster.py for the "Roster" tab
+}
+
+# Display the selected tab
+if selected_tab in sub_apps:
+    sub_app = sub_apps[selected_tab]
+    sub_app() if sub_app else None
+else:
+    st.error("Invalid tab selected")
+
+# # Main content based on the selected tab
+# if selected_tab == 'Main':
+#     st.title('Main Tab')
+#     # Add your main tab content here
+# elif selected_tab == 'Map':
+#     st.title('Map Tab')
+#     # Add your map tab content here
+# elif selected_tab == 'Roster':
+#     st.title('Roster Tab')
+#     # Add your COP tab content here
 
 # Function to apply custom styling for Row 1
 def set_background_color_row1(color, padding, title, content, fixed_height=False):
-    height_style = "height: 300px;" if fixed_height else ""
+    height_style = "height: 200px;" if fixed_height else ""
     return f"""
-        <div style="background-color:{color}; padding: {padding}px; border-radius: 10px; {height_style}">
-            <h2>{title}</h2>
+        <div style="background-color:{color}; padding: {padding}px; border-radius: 5px; {height_style}">
+            <h2 style="margin-top: 0; padding-top: 1px;">{title}</h2>
             <p>{content}</p>
         </div>
     """
