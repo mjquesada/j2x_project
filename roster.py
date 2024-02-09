@@ -2,7 +2,7 @@ import streamlit as st
 
 def roster_tab():
     # Row 1: Dropdowns
-    st.subheader("Filters")
+    st.subheader("Roster Tab")
 
     # Sub-Row 1 (Top Sub-Row)
     col1_top, col2_top, col3_top, col4_top, col5_top, col6_top = st.columns(6)
@@ -45,6 +45,9 @@ def roster_tab():
 
     with col6_bottom:
         ftn_filter = st.selectbox("FTN", ["12345", "67890"])
+        
+    # Sub-Row 3
+    col1_bottom, col2_bottom, col3_bottom, col4_bottom, col5_bottom = st.columns(5)
 
     # Add space between rows
     st.markdown('<div style="margin-top: 30px;"></div>', unsafe_allow_html=True)
@@ -54,13 +57,15 @@ def roster_tab():
 
     # Column 1: Personnel Counter
     with col1:
-        st.subheader("Personnel")
         personnel_count_value = 1500  # Placeholder value (update dynamically)
         st.metric("Personnel Count", personnel_count_value)
+        
+        country_count = 2500  # Placeholder value (update dynamically)
+        st.metric("Country Count", country_count)
 
     # Column 2: Table (Placeholder)
     with col2:
-        st.subheader("Personnel Table")
+        st.write("Personnel Table")
         # Placeholder for table (customize based on your data)
         table_data = {
             'Name': ['John', 'Jane', 'Bob'],

@@ -5,20 +5,24 @@ from roster import roster_tab
 
 def run_app():
     st.set_page_config(page_title='J2X', page_icon=':rocket:')
+    
+    # Custom CSS to remove padding
     custom_css = """
     <style>
-    h1 {
-        margin-top: 0;
-    }
-    /* Add this block for custom styling of Row 1 components */
-    [data-testid="stHorizontalBlock"] > div {
-        margin: 0;
-        padding: 0;
-    }
+        div.block-container {
+            padding-top:  1rem;  // Adjust this value as needed
+        }
+        h1 {
+            margin-top:  0;
+        }
+        /* Add this block for custom styling of Row  1 components */
+        [data-testid="stHorizontalBlock"] > div {
+            margin:  0;
+            padding:  0;
+        }
     </style>
     """
     st.markdown(custom_css, unsafe_allow_html=True)
-    st.markdown('<div style="display: flex; flex-direction: row;">', unsafe_allow_html=True)
 
     # Sidebar with buttons
     selected_tab = st.sidebar.radio("Navigation", ['Main', 'Map', 'Roster'])

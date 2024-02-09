@@ -4,8 +4,7 @@ from streamlit_folium import folium_static
 
 def map_tab():
     # Put your map tab content here
-    st.title("Map Tab")
-    st.write("This is the content of the Map Tab.")
+    st.subheader("Map Tab")
 
     # Layout setup
     col1, col2 = st.columns([1, 3])  # 25% width for col1, 75% width for col2
@@ -13,24 +12,24 @@ def map_tab():
     # Components in Column 1
     with col1:
         # Placeholder values
-        per_stat_value = 1000
-        count_by_tsoc_value = 500
+        personnel_count = 1000
+        country_count = 500
         duty_status_chart = "Placeholder Duty Status Bar Chart"
         count_by_component_chart = "Placeholder Count by Component Bar Chart"
 
         # Per Stat Component
-        st.metric("Per Stat", per_stat_value)
+        st.metric("Personnel Count", personnel_count)
 
         # Count by TSOC Component
-        st.metric("Count by TSOC", count_by_tsoc_value)
+        st.metric("Country Count", country_count)
 
         # Duty Status Breakout Component with Bar Chart
-        st.subheader("Duty Status Breakout")
-        st.bar_chart({"Placeholder": [50, 30, 20]}, use_container_width=True)  # Placeholder bar chart
+        st.write("AOR Breakdown")
+        st.bar_chart({"Placeholder": [50, 30, 20]}, height=220, use_container_width=True)  # Placeholder bar chart
 
         # Count by Component Component with Bar Chart
-        st.subheader("Count by Component")
-        st.bar_chart({"Placeholder": [30, 40, 10, 20]}, use_container_width=True)  # Placeholder bar chart
+        st.write("Breakdown by Branch")
+        st.bar_chart({"Placeholder": [30, 40, 10, 20]}, height=220, use_container_width=True)  # Placeholder bar chart
 
     # Components in Column 2
     with col2:
