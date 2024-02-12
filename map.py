@@ -1,6 +1,6 @@
 import streamlit as st
-import folium
-from streamlit_folium import folium_static
+import pandas as pd
+from functions import load_data, spatial_join, aggregate_data, filter_data, get_filters, create_choropleth_map
 
 def map_tab():
     # Put your map tab content here
@@ -14,8 +14,7 @@ def map_tab():
         # Placeholder values
         personnel_count = 1000
         country_count = 500
-        duty_status_chart = "Placeholder Duty Status Bar Chart"
-        count_by_component_chart = "Placeholder Count by Component Bar Chart"
+
 
         # Per Stat Component
         st.metric("Personnel Count", personnel_count)
@@ -54,12 +53,42 @@ def map_tab():
         with filter_col5:
             service_skill_filter = st.selectbox("Service Skill", ["Placeholder Skill1", "Placeholder Skill2"])
 
-        # Map row
-        st.subheader("Map")
-        # Placeholder coordinates for Shanghai
-        map_center = [31.2304, 121.4737]
-        folium_map = folium.Map(location=map_center, zoom_start=10)
-        folium_static(folium_map)
+        # Map Section
+        # Load Data
+        gdf_countries, df = load_data()
+
+        # Spatial Join
+        joined_gdf = spatial_join(df, gdf_countries)
+
+        # Aggregate Data
+        gdf_aggregated = aggregate_data(gdf_countries, joined_gdf)
+
+        # Filter Data
+        selected_countries, selected_agencies, selected_branches, selected_personnel_types = get_filters(joined_gdf)
+
+        # Filtered Data
+        filtered_gdf = filter_data(joined_gdf, selected_countries, selected_agencies, selected_branches, selected_personnel_types)
+
+        # Aggregate Filtered Data
+        filtered_aggregated_data = filtered_gdf.groupby('ADMIN').size().reset_index(name='RecordCount')
+        filtered_gdf_aggregated = pd.merge(gdf_countries, filtered_aggregated_data, how='left', left_on='ADMIN', right_on='ADMIN')
+        filtered_gdf_aggregated['RecordCount'].fillna(0, inplace=True)
+
+        # Create Choropleth Map
+        fig_filtered = create_choropleth_map(filtered_gdf_aggregated)
+
+        # Streamlit Title
+        #st.title('Force Disposition')
+
+        # Display the Filtered Map using Streamlit's st.plotly_chart function
+        st.plotly_chart(fig_filtered)
+
+    # Display Filtered DataFrame
+    st.write(f"Filtered Data (Total Records: {len(filtered_gdf)})")
+    st.write(filtered_gdf)
+
+    # Display additional information or statistics
+    st.sidebar.write(f'Total Records in selection: {len(filtered_gdf)}')
 
 # This allows your map.py to be run as a standalone app
 if __name__ == "__main__":
