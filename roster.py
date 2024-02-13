@@ -86,138 +86,154 @@ def roster_tab():
     st.title("Roster")
     df = DF
 
-
     state = get_session_state()
 
     def reset_session_state():
-        state.org_group = []
-        state.group = []
+        state.org = []
         state.aor = []
-        state.country = []
-        state.duty_status = []
-        state.type = []
-        state.deployability = []
-        state.nondeploy = []
+        state.duty_station = []
+        state.deploy = []
         state.branch = []
-        state.ftn = ""
+        state.service = []
+        state.group = []
+        state.country = []
+        state.type = []
+        state.waitver = []
+        state.sof = []
+        state.ftn = []
 
     update_queries = []
-    col1, col2 = st.columns((1.5,7))
+    col1, col2 = st.columns((1.5, 7))
 
     with col1:
-        
         with st.container():
             total = get_total_personnel(df)
             st.write(f"TOTAL PERSONNEL COUNT: {total}")
-        
+
         with st.container():
             st.write("PERSONNEL COUNT PER COUNTRY: ")
             counts_index, counts_values = get_personnel_count_per_column(df, "Country")
             for index, value in zip(counts_index, counts_values):
                 st.write(f"{index} : {value} ")
 
-        
     with col2:
 
         col1, col2, col3, col4, col5, col6 = st.columns(6)
         with col1:
             with st.container():
-                state.org_group =  st.multiselect("Org Group", 
-                            options=get_unique_values(DF,ALL_FILTERS["Org Group"]),
-                            key="OrgGroup")
-                
-                
+                state.org = st.multiselect("Org",
+                                                options=get_unique_values(DF, ALL_FILTERS["Organization"]),
+                                                key="Organization")
+
             with st.container():
-                state.group = st.multiselect("Group", 
-                            options=get_unique_values(DF,ALL_FILTERS["Group"]),
-                            key="Group")
+                state.aor = st.multiselect("AOR",
+                                            options=get_unique_values(DF, ALL_FILTERS["AOR"]),
+                                            key="AOR")
 
         with col2:
             with st.container():
-                state.aor = st.multiselect("AOR", 
-                            options=get_unique_values(DF,ALL_FILTERS["AOR"]),
-                            key="AOR")
-                
+                state.duty_station = st.multiselect("Location",
+                                        options=get_unique_values(DF, ALL_FILTERS["CurrentLocation"]),
+                                        key="CurrentLocation")
+
             with st.container():
-                state.country = st.multiselect("Country", 
-                            options=get_unique_values(DF,ALL_FILTERS["Country"]),
-                            key="Country")
+                state.deploy = st.multiselect("Deploy",
+                                            options=get_unique_values(DF, ALL_FILTERS["Deploy"]),
+                                            key="Deploy")
 
         with col3:
             with st.container():
-                state.duty_status = st.multiselect("Duty Status", 
-                            options=get_unique_values(DF,ALL_FILTERS["Duty Status"]),
-                            key="Duty Status")
-                
+                state.branch = st.multiselect("Branch",
+                                                options=get_unique_values(DF, ALL_FILTERS["Branch"]),
+                                                key="Branch")
+
             with st.container():
-                state.type = st.multiselect("Type", 
-                            options=get_unique_values(DF,ALL_FILTERS["Type"]),
-                            key="Type")
+                state.service = st.multiselect("Service",
+                                            options=get_unique_values(DF, ALL_FILTERS["ServiceSkill"]),
+                                            key="ServiceSkill")
 
         with col4:
             with st.container():
-                state.deployability = st.multiselect("Deployability", 
-                            options=get_unique_values(DF,ALL_FILTERS["Deployability"]),
-                            key="Deployability")
-                
+                state.group = st.multiselect("Group",
+                                                    options=get_unique_values(DF, ALL_FILTERS["Group"]),
+                                                    key="Group")
+
             with st.container():
-                state.nondeploy = st.multiselect("Nondeploy", 
-                            options=get_unique_values(DF,ALL_FILTERS["Nondeploy"]),
-                            key="Nondeploy")
+                state.country = st.multiselect("Country",
+                                                options=get_unique_values(DF, ALL_FILTERS["Country"]),
+                                                key="Country")
+
         with col5:
             with st.container():
-                state.branch = st.multiselect("Branch", 
-                            options=get_unique_values(DF,ALL_FILTERS["Branch"]),
-                            key="Branch")
+                state.type = st.multiselect("Type",
+                                            options=get_unique_values(DF, ALL_FILTERS["PersonnelType"]),
+                                            key="PersonnelType")
                 
             with st.container():
-                ftn = st.text_input(label="FTN?", key="FTN")
+                state.waiver = st.multiselect("Waiver",
+                                            options=get_unique_values(DF, ALL_FILTERS["Waiver"]),
+                                            key="Waiver")
                 
         with col6:
             with st.container():
-                state.service_skills = st.multiselect("Service Skill", 
-                            options=get_unique_values(DF,ALL_FILTERS["Service Skill"]))
-                
-            with st.container():
-                update_btn = st.button(label="Update Filters", type="secondary")
-                reset_btn = st.button(label="Clear Filters", type="primary")
+                state.sof = st.multiselect("SOF",
+                                            options=get_unique_values(DF, ALL_FILTERS["SOF"]),
+                                            key="SOF")
 
-    
+            with st.container():
+                state.ftn = st.multiselect("FTN",
+                                            options=get_unique_values(DF, ALL_FILTERS["FTN"]),
+                                            key="FTN")
+
+        # Add space between rows
+        st.markdown('<div style="margin-top: 30px;"></div>', unsafe_allow_html=True)
+
+        # Buttons
+        update_btn, reset_btn = st.columns(2)
+
+        with update_btn:
+            update_btn = st.button(label="Submit", type="secondary")
+
+        with reset_btn:
+            reset_btn = st.button(label="Clear", type="primary")
+
     if reset_btn:
         reset_session_state()
-        df = DF               
+        df = DF
 
-    if state.org_group:
-        st.write(state.org_group)
+    if state.org:
+        st.write(state.org)
     if state.group:
         st.write(state.group)
 
     # Grab the selected filters to filter the displayed dataframe
     if update_btn:
-        if state.org_group:
-            update_queries.append({"Organization": [state.org_group]})
-        if state.group:
-            update_queries.append({"OrgAbbreviation": [state.group]})
+        if state.org:
+            update_queries.append({"Organization": [state.org]})
         if state.aor:
             update_queries.append({"AOR": [state.aor]})
-        if state.country:
-            update_queries.append({"Country": [state.country]})
-        if state.duty_status:
-            update_queries.append({"Agency": [state.duty_status]})
-        if state.type:
-            update_queries.append({"Type": [state.type]})
-        if state.deployability:
-            update_queries.append({"Location": [state.deployability]})
-        if state.nondeploy:
-            update_queries.append({"State": [state.nondeploy]})
+        if state.duty_station:
+            update_queries.append({"AOR": [state.duty_station]})
+        if state.deploy:
+            update_queries.append({"Country": [state.deploy]})
         if state.branch:
-            update_queries.append({"Branch": [state.branch]})
-        if ftn:
+            update_queries.append({"Agency": [state.branch]})
+        if state.service:
+            update_queries.append({"Type": [state.service]})
+        if state.group:
+            update_queries.append({"Location": [state.group]})
+        if state.country:
+            update_queries.append({"State": [state.country]})
+        if state.type:
+            update_queries.append({"Branch": [state.type]})
+        if state.waiver:
+            update_queries.append({"State": [state.waiver]})
+        if state.sof:
+            update_queries.append({"State": [state.sof]})
+        if state.ftn:
             update_queries.append({"FTN": [state.ftn]})
 
-
     if update_queries:
-        # df = make_queries(DF, update_queries)
         if len(update_queries) == 1:
             df = make_queries(DF, update_queries[0])
         else:
@@ -228,8 +244,9 @@ def roster_tab():
                     df = df1
                 else:
                     df1 = make_queries(DF, query)
-                    df = pd.concat([df,df1], ignore_index=True)
-        
+                    df = pd.concat([df, df1], ignore_index=True)
+
+    # Display the roster dataframe after applying filters
     st.dataframe(df)
 
 # This allows your roster.py to be run as a standalone app

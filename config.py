@@ -16,12 +16,12 @@ data_info = config_obj["data"]
  
 # Data
 #TEST_DATA = data_info["test_file_path"]
-TEST_DATA = "data/Book1.csv"
+TEST_DATA = "data/Book2.csv"
 DF = pd.read_csv(TEST_DATA)
 
 # Filters
-MAP_FILTERS_KEYS = ["AOR","Country","Branch","Type","Service Skill"]
-MAP_FILTERS_VALUES = ["AOR","Country","Branch","Type","ServiceSkill"]
+MAP_FILTERS_KEYS = ["Organization", "AOR", "CurrentLocation", "Deploy", "Branch", "ServiceSkill", "Group", "Country", "PersonnelType", "Waiver", "SOF", "FTN"]
+MAP_FILTERS_VALUES = ["Organization", "AOR", "CurrentLocation", "Deploy", "Branch", "ServiceSkill", "Group", "Country", "PersonnelType", "Waiver", "SOF", "FTN"]
 
 
 MAP_FILTERS = dict(zip(MAP_FILTERS_KEYS,MAP_FILTERS_VALUES))
