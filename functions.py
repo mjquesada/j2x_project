@@ -5,6 +5,7 @@ import base64
 import geopandas as gpd
 import plotly.express as px
 import pandas as pd
+from pandas import DataFrame
 
 # Function to apply custom styling for Row  1 in main.py
 def set_background_color_row1(color, padding, title, content, fixed_height=False):
@@ -92,14 +93,34 @@ def filter_data(joined_gdf, selected_countries, selected_agencies, selected_bran
 
     return filtered_gdf
 
-def get_filters(joined_gdf):
-    # Add your logic to get filter values here
-    selected_countries = st.sidebar.multiselect('Select countries:', joined_gdf['ADMIN'].unique(), default=[])
-    selected_agencies = st.sidebar.multiselect('Select agencies:', joined_gdf['Agency'].unique(), default=[])
-    selected_branches = st.sidebar.multiselect('Select branches:', joined_gdf['Branch'].unique(), default=[])
-    selected_personnel_types = st.sidebar.multiselect('Select personnel types:', joined_gdf['PersonnelType'].unique(), default=[])
+# def get_filters(joined_gdf):
+#     selected_countries = st.sidebar.multiselect('Select countries:', joined_gdf['ADMIN'].unique(), default=[])
+#     selected_agencies = st.sidebar.multiselect('Select agencies:', joined_gdf['Agency'].unique(), default=[])
+#     selected_branches = st.sidebar.multiselect('Select branches:', joined_gdf['Branch'].unique(), default=[])
+#     selected_personnel_types = st.sidebar.multiselect('Select personnel types:', joined_gdf['PersonnelType'].unique(), default=[])
 
-    return selected_countries, selected_agencies, selected_branches, selected_personnel_types
+#     return selected_countries, selected_agencies, selected_branches, selected_personnel_types
+
+def get_filters(joined_gdf):
+    # Create a horizontal layout for the filter row
+    filter_col1, filter_col2, filter_col3, filter_col4, filter_col5 = st.columns(5)
+
+    with filter_col1:
+        selected_countries = st.multiselect('AOR:', joined_gdf['AOR'].unique(), default=[])
+
+    with filter_col2:
+        selected_agencies = st.multiselect('Country', joined_gdf['Country'].unique(), default=[])
+
+    with filter_col3:
+        selected_branches = st.multiselect('Branch:', joined_gdf['Branch'].unique(), default=[])
+
+    with filter_col4:
+        selected_personnel_types = st.multiselect('Personnel Types:', joined_gdf['PersonnelType'].unique(), default=[])
+
+    with filter_col5:
+        selected_service_skill = st.multiselect('Service Skill:', joined_gdf['ServiceSkill'].unique(), default=[])
+
+    return selected_countries, selected_agencies, selected_branches, selected_personnel_types, selected_service_skill
 
 def create_choropleth_map(data):
     fig = px.choropleth_mapbox(data, geojson=data.geometry, locations=data.index,
@@ -111,3 +132,48 @@ def create_choropleth_map(data):
     fig.update_traces(hovertemplate='<b>%{hovertext}</b><br>Record Count: %{z:,.0f}')
 
     return fig
+
+
+## Luis's Code
+
+def get_session_state():
+    session_state = st.session_state
+    if not hasattr(session_state, 'reset'):
+        session_state.reset = False
+    return session_state
+
+def get_total_personnel(df: DataFrame):
+    return df.shape[0]
+
+def get_AOR_main_personnel_count(df: DataFrame):
+    counts = df["AOR"].value_counts()
+    return counts
+
+def get_last_refresh_date(df: DataFrame):
+    return df.iloc[len(df.index)-1]["RefreshDate"]
+
+def get_unique_values(df: DataFrame, column_name):
+    return df[column_name].unique()
+
+def get_personnel_count_per_column(df: DataFrame, column_name):
+    counts = df[column_name].value_counts()
+    counts_index = counts.index.tolist()
+    counts_values = counts.values.tolist()
+    return counts_index, counts_values
+
+# Can do one query at a time
+def make_queries(df: DataFrame, filter_dict: dict) -> pd.DataFrame:
+    query_string = ""
+    for column, values in filter_dict.items():
+        # Assuming values is a list, join the values with '|' for OR condition
+        query_part = f"{column} == {str(values)[1:-1]}"
+        
+        # Add the query part to the main query string, 
+        # separating with '&' for AND condition
+        query_string += query_part + " & "
+    
+    # Remove the last '&' from the query string
+    query_string = query_string[:-3]
+    
+    filtered_df = df.query(query_string)
+    return filtered_df

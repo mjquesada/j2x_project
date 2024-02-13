@@ -1,4 +1,4 @@
-Name,DoDID,Agency,Organization,OrgAbbreviation,Branch,PersonnelType,CurrentLocation,Country,AOR,RefreshDate,State,lat,lon,ServiceSkill,FTN
+Name,DoDID,Agency,Organization,OrgAbbreviation,Branch,Type,Location,Country,AOR,RefreshDate,State,Latitude,Longitude,ServiceSkill,FTN
 Maryam England,123456789,FDA,Beef,FDA,Beef,Civilian,Texas,USA,AMER,7-Jan-24,Texas,29.7604,95.3698,11,123456789
 Josie Coffey,123456790,EPA,Trees,EPA,Trees,Military,California,USA,AMER,7-Jan-24,California,32.7157,117.1611,11,123456790
 Dale Mcknight,123456791,DOE,Weather,DOE,Weather,Contractor,Florida,USA,EUR,7-Jan-24,Florida,27.9517,82.4588,11,123456791
