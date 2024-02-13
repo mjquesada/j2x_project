@@ -6,6 +6,7 @@ import geopandas as gpd
 import plotly.express as px
 import pandas as pd
 from pandas import DataFrame
+from config import Input_Data
 
 # Function to apply custom styling for Row  1 in main.py
 def set_background_color_row1(color, padding, title, content, fixed_height=False):
@@ -57,7 +58,7 @@ def load_data():
     gdf_countries = gpd.read_file(geojson_path)
 
     # Load CSV file with coordinates
-    csv_path = './data/Book1.csv'
+    csv_path = './data/Book2.csv'
     df = pd.read_csv(csv_path)
 
     return gdf_countries, df
@@ -177,3 +178,19 @@ def make_queries(df: DataFrame, filter_dict: dict) -> pd.DataFrame:
     
     filtered_df = df.query(query_string)
     return filtered_df
+
+def filter_df(df: DataFrame, update_queries: list) -> pd.DataFrame:
+        # df = make_queries(DF, update_queries)
+    if len(update_queries) == 1:
+        df = make_queries(Input_Data, update_queries[0])
+        return df
+    else:
+        df1 = pd.DataFrame()
+        for query in update_queries:
+            if df1.empty:
+                df1 = make_queries(Input_Data, query)
+                df = df1
+            else:
+                df1 = make_queries(Input_Data, query)
+                df = pd.concat([df,df1], ignore_index=True).drop_duplicates()
+        return df
