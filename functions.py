@@ -15,7 +15,7 @@ def set_background_color_row1(color, padding, title, content, fixed_height=False
     return f"""
         <div style="background-color:{color}; padding: {padding}px; border-radius:  5px; {height_style}">
             <h2 style="margin-top:  0; padding-top:  1px;">{title}</h2>
-            <p>{content}</p>
+            <p style="font-size: 24px">{content}</p>
         </div>
     """
     
@@ -94,14 +94,6 @@ def filter_data(joined_gdf, selected_countries, selected_agencies, selected_bran
 
     return filtered_gdf
 
-# def get_filters(joined_gdf):
-#     selected_countries = st.sidebar.multiselect('Select countries:', joined_gdf['ADMIN'].unique(), default=[])
-#     selected_agencies = st.sidebar.multiselect('Select agencies:', joined_gdf['Agency'].unique(), default=[])
-#     selected_branches = st.sidebar.multiselect('Select branches:', joined_gdf['Branch'].unique(), default=[])
-#     selected_personnel_types = st.sidebar.multiselect('Select personnel types:', joined_gdf['PersonnelType'].unique(), default=[])
-
-#     return selected_countries, selected_agencies, selected_branches, selected_personnel_types
-
 def get_filters(joined_gdf):
     # Create a horizontal layout for the filter row
     filter_col1, filter_col2, filter_col3, filter_col4, filter_col5 = st.columns(5)
@@ -131,9 +123,23 @@ def create_choropleth_map(data):
                                hover_name="ADMIN", custom_data=["ADMIN"])
 
     fig.update_traces(hovertemplate='<b>%{hovertext}</b><br>Record Count: %{z:,.0f}')
+    
+    # Update layout to ensure full width
+    fig.update_layout(
+        autosize=True,
+        margin=dict(l=0, r=0, t=0, b=0),
+    )
+    
+    # Apply custom CSS to make the chart full width
+    st.write("""
+    <style>
+        .svg-container {
+            width: 100% !important;
+        }
+    </style>
+    """, unsafe_allow_html=True)
 
     return fig
-
 
 ## Luis's Code
 

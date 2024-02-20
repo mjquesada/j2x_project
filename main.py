@@ -21,7 +21,7 @@ def main_tab():
     # Component on the right (col2): AOR Breakdown
     with col2:
         aor_breakdown_title = "<h2>AOR Breakdown</h2>"
-        aor_labels = ['AFRICOM', 'CENTCOM', 'EUCOM', 'INDOPACOM']
+        aor_labels = ['AFRICOM', 'CENTCOM']
         aor_values = [700,  800,  600,  1053]
 
         # Combine AOR breakdown into a single component

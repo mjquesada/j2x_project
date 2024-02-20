@@ -28,19 +28,6 @@ def roster_tab():
         state.sof = []
         state.ftn = []
 
-    # def get_unique_values(df, column_name):
-    #     return df[column_name].unique()
-
-    # def get_total_personnel(df):
-    #     return len(df)
-
-    # def get_personnel_count_per_column(df, column_name):
-    #     return df[column_name].value_counts().index.tolist(), df[column_name].value_counts().values.tolist()
-
-    # def make_queries(df, query):
-    #     # Implement your logic to filter DataFrame based on query
-    #     return df
-
     if state.reset_session_state:
         reset_session_state()
         state.reset_session_state = False

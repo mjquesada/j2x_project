@@ -1,6 +1,6 @@
 import streamlit as st
 from main import main_tab
-from map import map_tab
+from force import force_tab
 from roster import roster_tab
 
 def run_app():
@@ -25,12 +25,12 @@ def run_app():
     st.markdown(custom_css, unsafe_allow_html=True)
 
     # Sidebar with buttons
-    selected_tab = st.sidebar.radio("Navigation", ['Main', 'Map', 'Roster'])
+    selected_tab = st.sidebar.radio("Navigation", ['Main', 'Force Disposition', 'Roster'])
 
     if selected_tab == 'Main':
         main_tab()
-    elif selected_tab == 'Map':
-        map_tab()
+    elif selected_tab == 'Force Disposition':
+        force_tab()
     elif selected_tab == 'Roster':
         roster_tab()
 
